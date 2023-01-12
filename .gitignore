@@ -7,4 +7,5 @@ bowtie2-*
 *.sai
 .Rhistory
 *.csv
+*.sqlite
 

@@ -10,8 +10,10 @@ select
 	'seq' || row_number() over () as id,
 	dna.flat->>'target_gene' as target_gene,
 	dna.flat->>'DNA_sequence' as sequence,
-	string_agg(id::text, '|') as ids
+	string_agg(occurrence.id::text, '|') as occurrence_ids,
+	string_agg(occurrence.aphia::text, '|') as aphia_ids
 from dna
+left join occurrence on dna.occurrence_id = occurrence.id
 group by dna.flat->>'target_gene', dna.flat->>'DNA_sequence';
 ```
 
