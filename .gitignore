@@ -1,0 +1,10 @@
+.DS_Store
+db
+bowtie2-*
+*.fasta
+*.fastq
+*.sam
+*.sai
+.Rhistory
+*.csv
+
