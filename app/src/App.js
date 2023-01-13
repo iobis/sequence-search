@@ -89,8 +89,8 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
               <Popup>
                 <Table className="text-sm table-sm">
                   <tbody>
-                    <tr><td>ID</td><td><a href={"https://obis.org/occurrence/" + occ.occurrence_id} target="_blank">{occ.occurrence_id}</a></td></tr>
-                    <tr><td>dataset ID</td><td><a href={"https://obis.org/dataset/" + occ.dataset_id} target="_blank">{occ.dataset_id}</a></td></tr>
+                    <tr><td>ID</td><td><a href={"https://obis.org/occurrence/" + occ.occurrence_id} rel="noreferrer" target="_blank">{occ.occurrence_id}</a></td></tr>
+                    <tr><td>dataset ID</td><td><a href={"https://obis.org/dataset/" + occ.dataset_id} rel="noreferrer" target="_blank">{occ.dataset_id}</a></td></tr>
                     <tr><td>scientificName</td><td>{occ.scientificName}</td></tr>
                     <tr><td>phylum</td><td>{occ.phylum}</td></tr>
                     <tr><td>class</td><td>{occ.class}</td></tr>
@@ -148,7 +148,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
                     <td>{occ.order}</td>
                     <td>{occ.family}</td>
                     <td>{occ.genus}</td>
-                    <td><a href={"https://obis.org/dataset/" + occ.dataset_id} target="_blank">link</a></td>
+                    <td><a href={"https://obis.org/dataset/" + occ.dataset_id} rel="noreferrer" target="_blank">link</a></td>
                   </tr>) }
                 </tbody>
               </Table> :
