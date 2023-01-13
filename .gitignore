@@ -8,4 +8,6 @@ bowtie2-*
 .Rhistory
 *.csv
 *.sqlite
+__pycache__
+*.pyc
 
