@@ -18,15 +18,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Packages
-      working-directory: app
       run: npm install
-    - name: Build page
       working-directory: app
+    - name: Build page
       run: npm run build
+      working-directory: app
     - name: Create cname file
       uses: finnp/create-file-action@master
       env:
-        FILE_NAME: "./build/CNAME"
+        FILE_NAME: "./app/build/CNAME"
         FILE_DATA: "sequence.obis.org"
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3.6.1
