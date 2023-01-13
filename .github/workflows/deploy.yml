@@ -14,7 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
-      working-directory: app
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
@@ -25,14 +24,12 @@ jobs:
       working-directory: app
       run: npm run build
     - name: Create cname file
-      working-directory: app
       uses: finnp/create-file-action@master
       env:
         FILE_NAME: "./build/CNAME"
         FILE_DATA: "sequence.obis.org"
     - name: Deploy to gh-pages
-      working-directory: app
       uses: peaceiris/actions-gh-pages@v3.6.1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+        publish_dir: ./app/build
