@@ -85,7 +85,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
 
         <MarkerClusterGroup maxClusterRadius={10}>
           {
-            occurrences.map(occ => <Marker key={occ.occurrence_id} position={[occ.decimalLatitude, occ.decimalLongitude]} >
+            occurrences.filter(x => x.decimalLatitude && x.decimalLongitude).map(occ => <Marker key={occ.occurrence_id} position={[occ.decimalLatitude, occ.decimalLongitude]} >
               <Popup>
                 <Table className="text-sm table-sm">
                   <tbody>
