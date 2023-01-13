@@ -48,7 +48,7 @@ with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
         count = 0
         for row in reader:
             seq = row["id"]
-            ids = row["ids"].split("|")
+            ids = row["occurrence_ids"].split("|")
             cur.executemany("insert into occurrence values (?, ?)", list(zip(ids, [seq])))
             count = count + 1
             bar.update(count)

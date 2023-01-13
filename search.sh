@@ -1,1 +1,0 @@
-./bowtie2-2.5.0-macos-arm64/bowtie2 -x db/sequences -U input.fasta -S output.sam -f --local --very-sensitive --no-unal -k 100 --no-sq --no-hd
