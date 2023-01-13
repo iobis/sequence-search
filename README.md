@@ -29,5 +29,7 @@ python generate_files.py
 
 ```sh
 cd api
-uvicorn main:app --reload
+uvicorn main:app --reload --port 8086
+# or
+gunicorn --worker-class uvicorn.workers.UvicornWorker --bind '127.0.0.1:8086' --daemon main:app
 ```
