@@ -1,8 +1,9 @@
 # sequence-search
 
 ## How to
+### Setup
 
-First download all sequences from the OBIS database:
+First download all sequences from the OBIS database to `data/sequences.csv`:
 
 ```sql
 create temp table temp_sequences as
@@ -17,26 +18,16 @@ left join occurrence on dna.occurrence_id = occurrence.id
 group by dna.flat->>'target_gene', dna.flat->>'DNA_sequence';
 ```
 
-Build the fasta file:
+Build the fasta file, occurrence sqlite database, and bowtie2 database:
 
 ```sh
-python generate_fasta.py
-```
-
-Build the bowtie2 database:
-
-```sh
+python generate_files.py
 ./build_db.sh
 ```
 
-Generate an input fasta file:
+### Run the API
 
 ```sh
-python generate_input.py
-```
-
-Test search:
-
-```sh
-./search.sh
+cd api
+uvicorn main:app --reload
 ```
