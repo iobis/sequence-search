@@ -1,13 +1,9 @@
 from fastapi import FastAPI
-from search import search
+from search import search_sequences
 
 app = FastAPI()
 
-
-@app.get("/")
-async def root():
-
-    seq = """
+default_sequence = """
 TAGTCATATGCTTGTCTCAAAGATAAGCCATGCATGTCTAAGTATAAGCGACTATACTGTGAAACTGCGA
 ATGGCTCATTAAATCAGTTATGGTTTATTTGATGGTACCTTGCTACTTGGATAACCGTAGTAATTCTAGA
 GCTAATACATGCAGGAGTTCCCGACTCACGGAGGGATGTATTTATTAGATAAGAAACCAAACCGGTCTCC
@@ -34,7 +30,11 @@ TAATCTTCAACGAGGAATTCCTAGTAAGCGTGTGTCATCAGCGCACGTTGATTACGTCCCTGCCCTTTGT
 ACACACCGCCCGTCGCTCCTACCGATTGAATGATCCGGTGAGGCCCCCGGACTGCGGCGCCGCAGCTGGT
 TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG
 TTTCC
-    """.replace("\n", "")
-    results = search(seq)
+""".replace("\n", "")
 
+
+@app.get("/search")
+async def search(sequence: str = None):
+
+    results = search_sequences(sequence if sequence is not None else default_sequence)
     return {"results": results}

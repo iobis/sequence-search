@@ -12,7 +12,7 @@ sqlite_file_path = os.path.abspath("../data/occurrence.sqlite")
 sam_file_path = os.path.abspath("../data/output.sam")
 
 
-def search(seq):
+def search_sequences(seq):
 
     # cleanup
 
@@ -30,7 +30,7 @@ def search(seq):
 
     # run bowtie2
 
-    os.system("../bowtie2-2.5.0-macos-arm64/bowtie2 -x ../data/db/sequences -U ../data/input.fasta -S ../data/output.sam -f --local --very-sensitive --no-unal -k 100")
+    os.system("bowtie2 -x ../data/db/sequences -U ../data/input.fasta -S ../data/output.sam -f --local --very-sensitive --no-unal -k 100")
 
     # sam results
 
