@@ -12,13 +12,13 @@ import sqlite3
 csv.field_size_limit(100000000)
 
 try:
-    os.remove("sequences.fasta")
+    os.remove("data/sequences.fasta")
 except FileNotFoundError:
     pass
 
 with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
-    with open("sequences.fasta", "w") as fasta_file:
-        with open("sequences.csv") as csv_file:
+    with open("data/sequences.fasta", "w") as fasta_file:
+        with open("data/sequences.csv") as csv_file:
             reader = csv.DictReader(csv_file)
             count = 0
             for row in reader:
@@ -34,16 +34,16 @@ with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
 # sqlite (occurrence IDs)
 
 try:
-    os.remove("occurrence.sqlite")
+    os.remove("data/occurrence.sqlite")
 except FileNotFoundError:
     pass
 
-con = sqlite3.connect("occurrence.sqlite")
+con = sqlite3.connect("data/occurrence.sqlite")
 cur = con.cursor()
 cur.execute("create table occurrence (id, seq)")
 
 with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
-    with open("sequences.csv") as csv_file:
+    with open("data/sequences.csv") as csv_file:
         reader = csv.DictReader(csv_file)
         count = 0
         for row in reader:
@@ -55,3 +55,4 @@ with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
 
 cur.execute("create index idx_seq on occurrence (seq)")
 con.commit()
+con.close()
