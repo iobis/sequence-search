@@ -38,3 +38,7 @@ code {
   width: 200px;
   opacity: 0.5;
 }
+
+.min-h-100 {
+  min-height: 100%;
+}
