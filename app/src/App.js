@@ -1,6 +1,6 @@
 
 import { React, useState } from "react";
-import { Navbar, Container, Row, Col, Table, Form, Button, Spinner } from "react-bootstrap";
+import { Navbar, Container, Row, Col, Table, Form, Button, Spinner, Nav, NavDropdown } from "react-bootstrap";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import MarkerClusterGroup from "@changey/react-leaflet-markercluster";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -69,6 +69,12 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
           <Navbar.Brand href="/">
             OBIS sequence search
           </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
+              <Nav.Link href="https://github.com/iobis/sequence-search" rel="noreferrer" target="_blank">GitHub</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
 
