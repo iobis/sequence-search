@@ -63,7 +63,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
   }
 
   return (
-    <div className="App d-flex flex-column h-100">
+    <div className="App d-flex flex-column min-h-100">
       <Navbar bg="light" expand="lg">
         <Container>
           <Navbar.Brand href="/">
@@ -91,7 +91,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
 
         <MarkerClusterGroup maxClusterRadius={10}>
           {
-            occurrences.filter(x => x.decimalLatitude && x.decimalLongitude).map(occ => <Marker key={occ.occurrence_id} position={[occ.decimalLatitude, occ.decimalLongitude]} >
+            occurrences.filter(x => x.decimalLatitude && x.decimalLongitude).map(occ => <Marker key={occ.occurrence_id + occ.as} position={[occ.decimalLatitude, occ.decimalLongitude]} >
               <Popup>
                 <Table className="text-sm table-sm">
                   <tbody>
@@ -149,7 +149,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
                   </tr>
                 </thead>
                 <tbody>
-                  { occurrences.map((occ) => <tr key={occ.id}>
+                  { occurrences.map((occ) => <tr key={occ.occurrence_id + occ.as}>
                     <td>{occ.scientificName}</td>
                     <td>{occ.as} <span className="bar" style={{width: occ.as / 10}}></span></td>
                     <td>{occ.phylum}</td>
