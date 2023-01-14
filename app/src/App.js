@@ -142,7 +142,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
                 <tbody>
                   { occurrences.map((occ) => <tr key={occ.id}>
                     <td>{occ.scientificName}</td>
-                    <td>{occ.as}</td>
+                    <td>{occ.as} <span className="bar" style={{width: occ.as / 10}}></span></td>
                     <td>{occ.phylum}</td>
                     <td>{occ.class}</td>
                     <td>{occ.order}</td>
