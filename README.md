@@ -1,7 +1,7 @@
 # sequence-search
 
 ## How to
-### Setup
+### Generate bowtie2 database
 
 First download all sequences from the OBIS database to `data/sequences.csv`:
 
