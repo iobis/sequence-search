@@ -63,7 +63,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
   }
 
   return (
-    <div className="App">
+    <div className="App d-flex flex-column h-100">
       <Navbar bg="light" expand="lg">
         <Container>
           <Navbar.Brand href="/">
@@ -113,11 +113,11 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
 
       </MapContainer>
 
-      <Container className="mt-4 mb-3">
+      <Container className="mt-4 mb-4">
         <Row className="mt-3 mb-3">
-          <Col lg={true} className="mb-3">
+          <Col lg={true} className="mb-3" sm={8}>
             <Form.Group className="mb-3" controlId="sequence">
-              <Form.Label>Sequence</Form.Label>
+              <Form.Label><h5>Sequence</h5></Form.Label>
               <Form.Control className="font-monospace" as="textarea" rows={8} value={sequence} onChange={handleSequenceChange} />
             </Form.Group>
             <Button variant="primary" onClick={handleSearch}>Search
@@ -125,7 +125,10 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
               <Spinner className="mx-2" animation="border" size="sm"></Spinner>
             }
             </Button>
-            
+          </Col>
+          <Col sm={4}>
+            <h5>About</h5>
+            <p>This application aligns sequences against all sequence records in the OBIS database using <a href="https://github.com/BenLangmead/bowtie2" target="_blank" rel="noreferrer">bowtie2</a>. Up to 100 occurrence records are returned ordered by alignment score.</p>
           </Col>
         </Row>
         <Row>
@@ -163,6 +166,24 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
           </Col>
         </Row>
       </Container>
+
+      <footer className="mt-auto">
+        <div className="footer mt-auto p-4 bg-dark">
+          <Container>
+            <Row>
+              <div className="col-md">
+                <p>
+                <img alt="" className="footer-logo mx-2" src="/NEW UNESCO_logo_hor_white.png" />
+                <img alt="" className="footer-logo mx-2" src="/lounsbery.png" />
+                </p>
+              </div>
+              <div className="col-md text-white opacity-50">
+                <p>This project is sponsored by the <a className="text-white" href="https://www.rlounsbery.org/" rel="noreferrer" target="_blank">Richard Lounsbery Foundation</a>.</p>
+              </div>
+            </Row>
+          </Container>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -33,3 +33,8 @@ code {
   background-color: #D7CCC8;
   border-radius: 5px;
 }
+
+.footer-logo {
+  width: 200px;
+  opacity: 0.5;
+}
