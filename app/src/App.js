@@ -91,13 +91,12 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
 
         <MarkerClusterGroup maxClusterRadius={10}>
           {
-            occurrences.filter(x => x.decimalLatitude && x.decimalLongitude).map(occ => <Marker key={occ.occurrence_id + occ.as} position={[occ.decimalLatitude, occ.decimalLongitude]} >
+            occurrences.filter(x => x.decimallatitude && x.decimallongitude).map((occ, i) => <Marker key={i} position={[occ.decimallatitude, occ.decimallongitude]} >
               <Popup>
                 <Table className="text-sm table-sm">
                   <tbody>
-                    <tr><td>ID</td><td><a href={"https://obis.org/occurrence/" + occ.occurrence_id} rel="noreferrer" target="_blank">{occ.occurrence_id}</a></td></tr>
                     <tr><td>dataset ID</td><td><a href={"https://obis.org/dataset/" + occ.dataset_id} rel="noreferrer" target="_blank">{occ.dataset_id}</a></td></tr>
-                    <tr><td>scientificName</td><td>{occ.scientificName}</td></tr>
+                    <tr><td>scientificName</td><td>{occ.scientificname}</td></tr>
                     <tr><td>phylum</td><td>{occ.phylum}</td></tr>
                     <tr><td>class</td><td>{occ.class}</td></tr>
                     <tr><td>order</td><td>{occ.order}</td></tr>
@@ -128,7 +127,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
           </Col>
           <Col sm={4}>
             <h5>About</h5>
-            <p>This application aligns sequences against all sequence records in the OBIS database using <a href="https://github.com/BenLangmead/bowtie2" target="_blank" rel="noreferrer">bowtie2</a>. Up to 100 occurrence records are returned ordered by alignment score.</p>
+            <p>This application aligns sequences against all sequence records in the OBIS database using <a href="https://github.com/BenLangmead/bowtie2" target="_blank" rel="noreferrer">bowtie2</a>. Up to 100 distinct sequences as well as the associated occurrence records are returned ordered by alignment score.</p>
           </Col>
         </Row>
         <Row>
@@ -149,8 +148,8 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
                   </tr>
                 </thead>
                 <tbody>
-                  { occurrences.map((occ) => <tr key={occ.occurrence_id + occ.as}>
-                    <td>{occ.scientificName}</td>
+                  { occurrences.map((occ, i) => <tr key={i}>
+                    <td>{occ.scientificname}</td>
                     <td>{occ.as} <span className="bar" style={{width: occ.as / 10}}></span></td>
                     <td>{occ.phylum}</td>
                     <td>{occ.class}</td>

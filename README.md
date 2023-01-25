@@ -3,26 +3,58 @@
 ## How to
 ### Generate bowtie2 database
 
-First download all sequences from the OBIS database to `data/sequences.csv`:
+First download all sequences and associated occurrences from the OBIS database to `data/sequences.csv` and `data/occurrences.csv`:
 
 ```sql
-create temp table temp_sequences as
+create temp table sequence_hashes as
 select
-	'seq' || row_number() over () as id,
-	dna.flat->>'target_gene' as target_gene,
-	dna.flat->>'DNA_sequence' as sequence,
-	string_agg(occurrence.id::text, '|') as occurrence_ids,
-	string_agg(occurrence.aphia::text, '|') as aphia_ids
-from dna
-left join occurrence on dna.occurrence_id = occurrence.id
-group by dna.flat->>'target_gene', dna.flat->>'DNA_sequence';
+	dna.id,
+	dna.occurrence_id,
+	MD5(dna.flat->>'DNA_sequence') as hash,
+	dna.flat->>'DNA_sequence' as sequence
+from dna;
+
+create temp table sequence_occurrences as
+select
+	sh.hash,
+	occurrence.decimallongitude as decimalLongitude,
+	occurrence.decimallatitude as decimalLatitude,
+	occurrence.dataset_id,
+	aphia.classification->>'phylum' as phylum,
+	aphia.classification->>'class' as class,
+	aphia.classification->>'order' as order,
+	aphia.classification->>'family' as family,
+	aphia.classification->>'genus' as genus,
+	aphia.record->>'scientificName' as scientificName,
+	count(*)
+from sequence_hashes sh
+left join occurrence on sh.occurrence_id = occurrence.id
+left join aphia on occurrence.aphia = aphia.id 
+group by
+	sh.hash,
+	occurrence.decimallongitude,
+	occurrence.decimallatitude,
+	occurrence.dataset_id,
+	aphia.classification->>'phylum',
+	aphia.classification->>'class',
+	aphia.classification->>'order',
+	aphia.classification->>'family',
+	aphia.classification->>'genus',
+	aphia.record->>'scientificName';
+
+
+select * from sequence_occurrences; -- occurrences.csv
+
+select distinct on (hash) hash, sequence -- sequences.csv
+from sequence_hashes
+order by hash;
 ```
 
 Build the fasta file, occurrence sqlite database, and bowtie2 database:
 
 ```sh
-python generate_files.py
 ./build_db.sh
+rsync -r data ***@***:/data/sequence-search/data
 ```
 
 ### Run the API
