@@ -4,7 +4,6 @@ from Bio.SeqRecord import SeqRecord
 import os
 import pysam
 import sqlite3
-import requests
 import tempfile
 import logging
 
@@ -47,7 +46,7 @@ def search_sequences(seq):
         samfile = pysam.AlignmentFile(sam_file_path)
         for read in samfile.fetch():
 
-            res = cur.execute("select * from occurrence where hash = ?", (read.reference_name,))
+            res = cur.execute("select * from occurrence where hash = ? limit 100", (read.reference_name,))
             rows = res.fetchall()
 
             for row in rows:

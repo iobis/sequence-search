@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from search import search_sequences
+import pandas as pd
+
 
 app = FastAPI()
 
@@ -35,6 +37,10 @@ TTTCC
 
 @app.get("/search")
 async def search(sequence: str = None):
-
     results = search_sequences(sequence if sequence is not None else default_sequence)
-    return {"results": results}
+    df = pd.DataFrame.from_records(results).groupby(["as", "dataset_id", "phylum", "class", "order", "family", "genus", "scientificname"]).agg({"count": "sum"}).sort_values(by="as", ascending=False).reset_index()
+    table = list(df.T.to_dict().values())
+    return {
+        "results": results,
+        "table": table
+    }

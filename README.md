@@ -17,8 +17,8 @@ from dna;
 create temp table sequence_occurrences as
 select
 	sh.hash,
-	occurrence.decimallongitude as decimalLongitude,
-	occurrence.decimallatitude as decimalLatitude,
+	round(occurrence.decimallongitude, 3) as decimalLongitude,
+	round(occurrence.decimallatitude, 3) as decimalLatitude,
 	occurrence.dataset_id,
 	aphia.classification->>'phylum' as phylum,
 	aphia.classification->>'class' as class,
@@ -32,8 +32,8 @@ left join occurrence on sh.occurrence_id = occurrence.id
 left join aphia on occurrence.aphia = aphia.id 
 group by
 	sh.hash,
-	occurrence.decimallongitude,
-	occurrence.decimallatitude,
+	round(occurrence.decimallongitude, 3),
+	round(occurrence.decimallatitude, 3),
 	occurrence.dataset_id,
 	aphia.classification->>'phylum',
 	aphia.classification->>'class',
@@ -41,7 +41,6 @@ group by
 	aphia.classification->>'family',
 	aphia.classification->>'genus',
 	aphia.record->>'scientificName';
-
 
 select * from sequence_occurrences; -- occurrences.csv
 
