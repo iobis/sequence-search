@@ -41,54 +41,24 @@ def search_sequences(seq):
         records = []
 
         con = sqlite3.connect(sqlite_file_path)
+        con.row_factory = sqlite3.Row
         cur = con.cursor()
 
         samfile = pysam.AlignmentFile(sam_file_path)
         for read in samfile.fetch():
 
-            res = cur.execute("select id from occurrence where seq = ?", (read.reference_name,))
+            res = cur.execute("select * from occurrence where hash = ?", (read.reference_name,))
             rows = res.fetchall()
+
             for row in rows:
-                record = {
-                    "as": read.get_tag("AS"),
-                    "reference_name": read.reference_name,
-                    "query_alignment_start": read.query_alignment_start,
-                    "query_alignment_end": read.query_alignment_end,
-                    "query_alignment_length": read.query_alignment_length,
-                    "reference_start": read.reference_start,
-                    "reference_end": read.reference_end,
-                    "reference_length": read.reference_length,
-                    "occurrence_id": row[0]
-                }
+                record = dict(zip(row.keys(), row))
+                record["as"] = read.get_tag("AS")
                 records.append(record)
+
+            if len(records) > 500:
+                break
 
         con.close()
         samfile.close()
 
-        # add OBIS occurrences
-
-        occurrence_ids = ",".join([record["occurrence_id"] for record in records])
-        url = f"https://api.obis.org/occurrence?size=1000&id={occurrence_ids}"
-        res = requests.get(url)
-        occurrences = res.json()["results"]
-
-        occurrence_map = {occurrence["id"]: {
-            "scientificName": occurrence["scientificName"] if "scientificName" in occurrence else None,
-            "decimalLongitude": occurrence["decimalLongitude"] if "decimalLongitude" in occurrence else None,
-            "decimalLatitude": occurrence["decimalLatitude"] if "decimalLatitude" in occurrence else None,
-            "eventDate": occurrence["eventDate"] if "eventDate" in occurrence else None,
-            "date_year": occurrence["date_year"] if "date_year" in occurrence else None,
-            "dataset_id": occurrence["dataset_id"] if "dataset_id" in occurrence else None,
-            "phylum": occurrence["phylum"] if "phylum" in occurrence else None,
-            "class": occurrence["class"] if "class" in occurrence else None,
-            "order": occurrence["order"] if "order" in occurrence else None,
-            "family": occurrence["family"] if "family" in occurrence else None,
-            "genus": occurrence["genus"] if "genus" in occurrence else None
-        } for occurrence in occurrences}
-
-        for record in records:
-            if record["occurrence_id"] in occurrence_map:
-                record.update(occurrence_map[record["occurrence_id"]])
-
         return records
-

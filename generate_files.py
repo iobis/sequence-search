@@ -7,7 +7,8 @@ import progressbar
 import sqlite3
 
 
-csv_file_path = os.path.abspath("data/sequences.csv")
+sequence_file_path = os.path.abspath("data/sequences.csv")
+occurrence_file_path = os.path.abspath("data/occurrences.csv")
 fasta_file_path = os.path.abspath("data/sequences.fasta")
 sqlite_file_path = os.path.abspath("data/occurrence.sqlite")
 
@@ -23,14 +24,14 @@ except FileNotFoundError:
 
 with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
     with open(fasta_file_path, "w") as fasta_file:
-        with open(csv_file_path) as csv_file:
+        with open(sequence_file_path) as csv_file:
             reader = csv.DictReader(csv_file)
             count = 0
             for row in reader:
                 record = SeqRecord(
                     Seq(row["sequence"]),
-                    id=row["id"],
-                    description=row["target_gene"]
+                    id=row["hash"],
+                    description=row["hash"]
                 )
                 SeqIO.write([record], fasta_file, "fasta")
                 count = count + 1
@@ -45,19 +46,16 @@ except FileNotFoundError:
 
 con = sqlite3.connect(sqlite_file_path)
 cur = con.cursor()
-cur.execute("create table occurrence (id, seq)")
-
+cur.execute("create table occurrence (hash, decimallongitude real, decimallatitude real, dataset_id, phylum, class, \"order\", family, genus, scientificname, count int)")
 with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
-    with open(csv_file_path) as csv_file:
+    with open(occurrence_file_path) as csv_file:
         reader = csv.DictReader(csv_file)
         count = 0
         for row in reader:
-            seq = row["id"]
-            ids = row["occurrence_ids"].split("|")
-            cur.executemany("insert into occurrence values (?, ?)", list(zip(ids, [seq])))
+            cur.execute("insert into occurrence values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", list(row.values()))
             count = count + 1
             bar.update(count)
 
-cur.execute("create index idx_seq on occurrence (seq)")
+cur.execute("create index idx_hash on occurrence (hash)")
 con.commit()
 con.close()
