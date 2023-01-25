@@ -20,6 +20,7 @@ L.Icon.Default.mergeOptions({
 function App() {
 
   const [occurrences, setOccurrences] = useState([]);
+  const [table, setTable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [sequence, setSequence] = useState(`TAGTCATATGCTTGTCTCAAAGATAAGCCATGCATGTCTAAGTATAAGCGACTATACTGTGAAACTGCGA
 ATGGCTCATTAAATCAGTTATGGTTTATTTGATGGTACCTTGCTACTTGGATAACCGTAGTAATTCTAGA
@@ -57,6 +58,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
       const res = await fetch("https://api.sequence.obis.org/search?sequence=" + sequence.trim());
       const data = await res.json();
       setOccurrences(data["results"]);
+      setTable(data["table"]);
       setLoading(false);
     }
     search(sequence);
@@ -133,7 +135,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
         <Row>
           <Col>
             {
-              occurrences.length ?
+              table.length ?
               <Table className="text-sm table-sm">
                 <thead>
                   <tr>
@@ -148,7 +150,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
                   </tr>
                 </thead>
                 <tbody>
-                  { occurrences.map((occ, i) => <tr key={i}>
+                  { table.map((occ, i) => <tr key={i}>
                     <td>{occ.scientificname}</td>
                     <td>{occ.as} <span className="bar" style={{width: occ.as / 10}}></span></td>
                     <td>{occ.phylum}</td>
