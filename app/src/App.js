@@ -25,7 +25,7 @@ function App() {
   const [table, setTable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [slider, setSlider] = useState(100);
-  const [maxSlider, setMaxSlider] = useState(1000);
+  const [maxSlider, ] = useState(1000);
   const [sequence, setSequence] = useState(`TAGTCATATGCTTGTCTCAAAGATAAGCCATGCATGTCTAAGTATAAGCGACTATACTGTGAAACTGCGA
 ATGGCTCATTAAATCAGTTATGGTTTATTTGATGGTACCTTGCTACTTGGATAACCGTAGTAATTCTAGA
 GCTAATACATGCAGGAGTTCCCGACTCACGGAGGGATGTATTTATTAGATAAGAAACCAAACCGGTCTCC
