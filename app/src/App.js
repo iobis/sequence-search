@@ -10,6 +10,8 @@ import iconRetina from "leaflet/dist/images/marker-icon-2x.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import "@changey/react-leaflet-markercluster/dist/styles.min.css";
 import L from "leaflet";
+import Control from "react-leaflet-custom-control";
+import ReactSlider from "react-slider";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: iconRetina,
@@ -22,6 +24,8 @@ function App() {
   const [occurrences, setOccurrences] = useState([]);
   const [table, setTable] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [slider, setSlider] = useState(100);
+  const [maxSlider, setMaxSlider] = useState(1000);
   const [sequence, setSequence] = useState(`TAGTCATATGCTTGTCTCAAAGATAAGCCATGCATGTCTAAGTATAAGCGACTATACTGTGAAACTGCGA
 ATGGCTCATTAAATCAGTTATGGTTTATTTGATGGTACCTTGCTACTTGGATAACCGTAGTAATTCTAGA
 GCTAATACATGCAGGAGTTCCCGACTCACGGAGGGATGTATTTATTAGATAAGAAACCAAACCGGTCTCC
@@ -48,11 +52,15 @@ TAATCTTCAACGAGGAATTCCTAGTAAGCGTGTGTCATCAGCGCACGTTGATTACGTCCCTGCCCTTTGT
 ACACACCGCCCGTCGCTCCTACCGATTGAATGATCCGGTGAGGCCCCCGGACTGCGGCGCCGCAGCTGGT
 TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
 
-  function handleSequenceChange(e) {
-    setSequence(e.target.value);
-  }
+function handleSequenceChange(e) {
+  setSequence(e.target.value);
+}
 
-  function handleSearch() {
+function handleSliderChange(value) {
+  setSlider(value);
+}
+
+function handleSearch() {
     setLoading(true);
     async function search() {
       const res = await fetch("https://api.sequence.obis.org/search?sequence=" + sequence.trim());
@@ -93,7 +101,7 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
 
         <MarkerClusterGroup maxClusterRadius={10}>
           {
-            occurrences.filter(x => x.decimallatitude && x.decimallongitude).map((occ, i) => <Marker key={i} position={[occ.decimallatitude, occ.decimallongitude]} >
+            occurrences.filter(x => x.decimallatitude && x.decimallongitude && x.as > slider).map((occ, i) => <Marker key={i} position={[occ.decimallatitude, occ.decimallongitude]} >
               <Popup>
                 <Table className="text-sm table-sm">
                   <tbody>
@@ -111,6 +119,15 @@ TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
             </Marker>)
           }
         </MarkerClusterGroup>
+
+        { slider !== null &&
+          <Control prepend position="bottomleft">
+            <span>Minimum alignment score: { slider }</span>
+            <ReactSlider className="slider" thumbClassName="thumb" trackClassName="track" value={slider} max={maxSlider} onAfterChange={(value, index) =>
+              handleSliderChange(value)
+            } />
+          </Control>
+        }
 
       </MapContainer>
 
