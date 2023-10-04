@@ -38,8 +38,11 @@ TTTCC
 @app.get("/search")
 async def search(sequence: str = None):
     results = search_sequences(sequence if sequence is not None else default_sequence)
-    df = pd.DataFrame.from_records(results).groupby(["as", "dataset_id", "phylum", "class", "order", "family", "genus", "scientificname"]).agg({"count": "sum"}).sort_values(by="as", ascending=False).reset_index()
-    table = list(df.T.to_dict().values())
+    if len(results) > 0:
+        df = pd.DataFrame.from_records(results).groupby(["as", "dataset_id", "phylum", "class", "order", "family", "genus", "scientificname"]).agg({"count": "sum"}).sort_values(by="as", ascending=False).reset_index()
+        table = list(df.T.to_dict().values())
+    else:
+        table = []
     return {
         "results": results,
         "table": table
