@@ -19,51 +19,46 @@ L.Icon.Default.mergeOptions({
   shadowUrl: iconShadow,
 });
 
+const examples = [
+  `CCGCGGTAAGACGGAGGATGCAAGTGTTATCCGGAATCACTGGGCGTAAAGCGTCTGTAGGTGGTTTAATAAGTCAACTGTTAAATCTTGAGGCTCAACTTCAAAATCGCAGTCGAAACTATTAGACTAGAGTATAGTAGAGGTAAAGGGAATTTCCAGTGGAGCGGTGAAATGCGTAGATATTGGAAAGAACACCGATGGCGAAAGCACTTTACTGGGCTATTACTAACACTCAGAGACGAAAGCTAGGGTAG`,
+  `AGCCGCGGTAATTCCAGCTCCAATAGCGTATATTAAAGTTGTTGCAGTTAAAAAGCTCGTAGTTGGATTTCGGAGCGGGCCAGTTGGTCGGCCGCAAGGTCTGTTACTGACTGGTCTGCTCTTCTTCGCAAAGACTGCGTGTGCTCTTGACTGAGTGTGCGTAGGATTTACGACGTTTACTTTGAAAAAATTAGAGTGTTCAAAGCAGGC`,
+  `TGGTGGAGTGATTTGTCTGGTTAATTCCGTTAACGAACGAGACCTTAACCTGCTAAATAGTTACATGTAATTCCGGTTATGTGGGCAACTTCTTAGAGGGACTTTGTGTGTATAACGCAAGGAAGTTTGAGGCAATAACA`,
+  `AGGTTTACTTTGAAAAAATTAGAGTGCTCAAAGCAGGCTAAAATGCCTGAATATTCGTGCATGGAATAATAGAATAGGATGTCGATCCTATTTTGTTGGTTTTCGGGACTCGACATAATGATAAATAGGGACAGTCGGGGGCATTTGTATTCAAACGACAGAGGTGAAATTCTTGGACCGTTTGAAGACAAACTACTGCGAAAGCATTTG`
+]
+
 function App() {
 
   const [occurrences, setOccurrences] = useState([]);
   const [table, setTable] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [slider, setSlider] = useState(100);
-  const [maxSlider, ] = useState(1000);
-  const [sequence, setSequence] = useState(`TAGTCATATGCTTGTCTCAAAGATAAGCCATGCATGTCTAAGTATAAGCGACTATACTGTGAAACTGCGA
-ATGGCTCATTAAATCAGTTATGGTTTATTTGATGGTACCTTGCTACTTGGATAACCGTAGTAATTCTAGA
-GCTAATACATGCAGGAGTTCCCGACTCACGGAGGGATGTATTTATTAGATAAGAAACCAAACCGGTCTCC
-GGTTGCGTGCTGAGTCATAATAACTGCTCGAATCGCACGGCTCTACGCCGGCGATGGTTCATTCAAATTT
-CTGCCCTATCAGCTTTCGATGGTAGGATAGAGGCCTACCATGGCGTTAACGGGTAACGGAGAATTAGGGT
-TCGATTCCGGAGAGGGAGCCTGAGAAATGGCTACCACATCCAAGGAAGGCAGCAGGCGCGTAAATTGCCC
-GAATCCTGACACAGGGAGGTAGTGACAAGAAATAACAATACAGGGCTATTTTAGTCTTGTAATTGGAATG
-AGTACAATTTACATCTCTTCACGAGGATCAATTGGAGGGCAAGTCTGGTGCCAGCAGCCGCGGTAATTCC
-AGCTCCAATAGCGTATATTAAAGTTGTTGCAGTTAAAACGCTCGTAGTCGGATTTCGGGGCGGGCCGACC
-GGTCTGCCGATGGGTATGCACTGGCCGGCGCGTCCTTCCACCCGGAGACCGCGCCTACTCTTAACTGAGC
-GGGCGCGGGAGACGGGTCTTTTACTTTGAAAAAATCAGAGTGTTTCAAGCAGGCAGTCGCTCTTGCATGG
-ATTAGCATGGGATAATGAAATAGGACTCTGGTGCTATTTTGTTGGTTTCGAACACCGGAGTAATGATTAA
-CAGGGACAGTCAGGGGCACTCGTATTCCGCCGAGAGAGGTGAAATTCTCAGACCAGCGGAAGACGAACCA
-CTGCGAAAGCATTTGCCAGGGATGTTTTCACTGATCAAGAACGAAAGTTAGGGGATCGAAGACGATCAGA
-TACCGTCGTAGTCTTAACCATAAACCATGCCGACTAGGGATTGGAGGATGTTCCATTTGTGACTCCTTCA
-GCACCTTTCGGGAAACTAAAGTCTTTGGGTTCCGGGGGGAGTATGGTCGCAAGGCTGAAACTTAAAGGAA
-TTGACGGAAGGGCACCACCAGGAGTGGAGCCTGCGGCTTAATTTGACTCAACACGGGGAAACTTACCAGG
-TCCAGCACATTGTGAGGATTGACAGATTGAGAGCTCTTTCTTGATTCGATGGGTGGTGGTGCATGGCCGT
-TCTTAGTTGGTGGAGTGATTTGTCTGGTTAATTCCGTTAACGAACGAGACCGCAGCCTGCTAAATAGCGA
-CGCGAACCCTCCGTTCGCTGGAGCTTCTTAGAGGGACAACTTGTCTTCAACAAGTGGAAGTTCGCGGCAA
-TAACAGGTCTGTGATGCCCTTAGATGTTCTGGGCCGCACGCGCGCTACACTGATGCACTCAACGAGTCTA
-TCACCTTGACCGAGAGGTCCGGGTAATCTTTTGAAATTGCATCGTGATGGGGATAGATTATTGCAACTAT
-TAATCTTCAACGAGGAATTCCTAGTAAGCGTGTGTCATCAGCGCACGTTGATTACGTCCCTGCCCTTTGT
-ACACACCGCCCGTCGCTCCTACCGATTGAATGATCCGGTGAGGCCCCCGGACTGCGGCGCCGCAGCTGGT
-TCTCCAGCCGCGACGCCGCGGGAAGCTGTCCGAACCTTATCATTTAGAGGAAGGAGAAGTCGTAACAAGG`);
+  const [slider, setSlider] = useState(95);
+  const [maxSlider, ] = useState(100);
+  const [exampleIndex, setExampleIndex] = useState(0);
+  const [sequence, setSequence] = useState(examples[0]);
 
-function handleSequenceChange(e) {
-  setSequence(e.target.value);
-}
-
-function handleSliderChange(value) {
+  function handleSequenceChange(e) {
+    setSequence(e.target.value);
+  }
+  
+  function handleLoadExample(e) {
+    if (exampleIndex === examples.length - 1) {
+      setExampleIndex(0);
+      setSequence(examples[0]);
+    } else {
+      setExampleIndex(exampleIndex + 1);
+      setSequence(examples[exampleIndex + 1]);
+    }
+  }
+  
+  function handleSliderChange(value) {
   setSlider(value);
 }
 
 function handleSearch() {
     setLoading(true);
     async function search() {
-      const res = await fetch("https://api.sequence.obis.org/search?sequence=" + sequence.trim());
+      // const res = await fetch("https://api.sequence.obis.org/search?sequence=" + sequence.trim());
+      const res = await fetch("http://localhost:8000/search?sequence=" + sequence.trim());
       const data = await res.json();
       setOccurrences(data["results"]);
       setTable(data["table"]);
@@ -122,8 +117,8 @@ function handleSearch() {
 
         { slider !== null &&
           <Control prepend position="bottomleft">
-            <span>Minimum alignment score: { slider }</span>
-            <ReactSlider className="slider" thumbClassName="thumb" trackClassName="track" value={slider} max={maxSlider} onAfterChange={(value, index) =>
+            <span>Identity threshold: { slider }%</span>
+            <ReactSlider className="slider" thumbClassName="thumb" trackClassName="track" value={slider} min={80} max={maxSlider} onAfterChange={(value, index) =>
               handleSliderChange(value)
             } />
           </Control>
@@ -143,10 +138,11 @@ function handleSearch() {
               <Spinner className="mx-2" animation="border" size="sm"></Spinner>
             }
             </Button>
+            <Button className="ms-2" variant="light" onClick={handleLoadExample}>Load example</Button>
           </Col>
           <Col sm={4}>
             <h5>About</h5>
-            <p>This application aligns sequences against all sequence records in the OBIS database using <a href="https://github.com/BenLangmead/bowtie2" target="_blank" rel="noreferrer">bowtie2</a>. Up to 100 distinct sequences as well as the associated occurrence records are returned ordered by alignment score.</p>
+            <p>This application aligns sequences against all sequence records in the OBIS database using <a href="https://github.com/torognes/vsearch" target="_blank" rel="noreferrer">VSEARCH</a>. Up to 100 distinct sequences as well as the associated occurrence records are returned ordered by sequence similarity. In the table below, occurrences are grouped by sequence, taxonomy, and dataset.</p>
           </Col>
         </Row>
         <Row>
@@ -157,7 +153,7 @@ function handleSearch() {
                 <thead>
                   <tr>
                     <th>scientificName</th>
-                    <th>alignment score</th>
+                    <th>identity</th>
                     <th>phylum</th>
                     <th>class</th>
                     <th>order</th>
@@ -169,13 +165,13 @@ function handleSearch() {
                 <tbody>
                   { table.map((occ, i) => <tr key={i}>
                     <td>{occ.scientificname}</td>
-                    <td>{occ.as} <span className="bar" style={{width: occ.as / 10}}></span></td>
+                    <td>{occ.as} <span className="bar" style={{width: Math.max(0, (occ.as - 95) * 10)}}></span></td>
                     <td>{occ.phylum}</td>
                     <td>{occ.class}</td>
                     <td>{occ.order}</td>
                     <td>{occ.family}</td>
                     <td>{occ.genus}</td>
-                    <td><a href={"https://obis.org/dataset/" + occ.dataset_id} rel="noreferrer" target="_blank">link</a></td>
+                    <td><a href={"https://obis.org/dataset/" + occ.dataset_id} rel="noreferrer" target="_blank">{occ.dataset_id}</a></td>
                   </tr>) }
                 </tbody>
               </Table> :

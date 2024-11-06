@@ -3,7 +3,7 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import os
-import progressbar
+# import progressbar
 import sqlite3
 
 
@@ -22,20 +22,21 @@ try:
 except FileNotFoundError:
     pass
 
-with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
-    with open(fasta_file_path, "w") as fasta_file:
-        with open(sequence_file_path) as csv_file:
-            reader = csv.DictReader(csv_file)
-            count = 0
-            for row in reader:
-                record = SeqRecord(
-                    Seq(row["sequence"]),
-                    id=row["hash"],
-                    description=row["hash"]
-                )
-                SeqIO.write([record], fasta_file, "fasta")
-                count = count + 1
-                bar.update(count)
+# bar = progressbar.ProgressBar()
+with open(fasta_file_path, "w") as fasta_file:
+    with open(sequence_file_path) as csv_file:
+        reader = csv.DictReader(csv_file)
+        count = 0
+        for row in reader:
+            seq = str(row["sequence"]).replace("-", "")
+            record = SeqRecord(
+                Seq(seq),
+                id=row["hash"],
+                description=row["hash"]
+            )
+            SeqIO.write([record], fasta_file, "fasta")
+            count = count + 1
+            # bar.update(count)
 
 # sqlite (occurrence IDs)
 
@@ -47,14 +48,14 @@ except FileNotFoundError:
 con = sqlite3.connect(sqlite_file_path)
 cur = con.cursor()
 cur.execute("create table occurrence (hash, decimallongitude real, decimallatitude real, dataset_id, phylum, class, \"order\", family, genus, scientificname, count int)")
-with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
-    with open(occurrence_file_path) as csv_file:
-        reader = csv.DictReader(csv_file)
-        count = 0
-        for row in reader:
-            cur.execute("insert into occurrence values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", list(row.values()))
-            count = count + 1
-            bar.update(count)
+# with progressbar.ProgressBar(max_value=progressbar.UnknownLength) as bar:
+with open(occurrence_file_path) as csv_file:
+    reader = csv.DictReader(csv_file)
+    count = 0
+    for row in reader:
+        cur.execute("insert into occurrence values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", list(row.values()))
+        count = count + 1
+        # bar.update(count)
 
 cur.execute("create index idx_hash on occurrence (hash)")
 con.commit()

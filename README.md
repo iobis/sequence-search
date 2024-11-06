@@ -53,6 +53,21 @@ Build the fasta file, occurrence sqlite database, and bowtie2 database:
 
 ```sh
 ./build_db.sh
+```
+
+### Generate vsearch database
+
+```bash
+./vsearch-2.29.1-macos-aarch64/bin/vsearch --makeudb_usearch data/sequences.fasta --output data/sequences.udb
+```
+
+```bash
+./vsearch-2.29.1-macos-aarch64/bin/vsearch --usearch_global perna.fasta --db data/sequences.udb --id 0.95 --query_cov 0.95 --maxaccepts 100 --maxrejects 100 --maxhits 10 --blast6out output.txt
+```
+
+### Upload data
+
+```sh
 rsync -r data ***@***:/data/sequence-search/data
 ```
 
