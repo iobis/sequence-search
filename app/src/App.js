@@ -96,7 +96,7 @@ function handleSearch() {
 
         <MarkerClusterGroup maxClusterRadius={10}>
           {
-            occurrences.filter(x => x.decimallatitude && x.decimallongitude && x.as > slider).map((occ, i) => <Marker key={i} position={[occ.decimallatitude, occ.decimallongitude]} >
+            occurrences.filter(x => x.decimallatitude && x.decimallongitude && x.as >= slider).map((occ, i) => <Marker key={i} position={[occ.decimallatitude, occ.decimallongitude]} >
               <Popup>
                 <Table className="text-sm table-sm">
                   <tbody>
