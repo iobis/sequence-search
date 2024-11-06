@@ -12,6 +12,10 @@ sqlite_file_path = os.path.abspath("../data/occurrence.sqlite")
 logging.basicConfig(level=logging.INFO)
 
 
+os.environ["PATH"] += os.pathsep + "/Users/pieter/IPOfI Dropbox/Pieter Provoost/werk/projects/OBIS pipeline/sequence-search/vsearch-2.29.1-macos-aarch64/bin"
+os.environ["PATH"] += os.pathsep + "/data/vsearch-2.29.1/bin"
+
+
 def search_sequences(seq, strategy="vsearch"):
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -65,8 +69,6 @@ def search_sequences(seq, strategy="vsearch"):
 
             blast_file_path = os.path.join(tmpdir, "output.blast")
 
-            vsearch_path = "/Users/pieter/IPOfI Dropbox/Pieter Provoost/werk/projects/OBIS pipeline/sequence-search/vsearch-2.29.1-macos-aarch64/bin"
-            os.environ["PATH"] += os.pathsep + vsearch_path
             os.system(f"vsearch --usearch_global {input_file_path} --db ../data/sequences.udb --id 0.9 --query_cov 0.9 --maxaccepts 100 --maxrejects 100 --maxhits 100 --blast6out {blast_file_path}")
 
             con = sqlite3.connect(sqlite_file_path)

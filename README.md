@@ -68,7 +68,7 @@ Build the fasta file, occurrence sqlite database, and bowtie2 database:
 ### Upload data
 
 ```sh
-rsync -r data ***@***:/data/sequence-search/data
+rsync -r data root@obisr.iode.vliz.be:/data/sequence-search
 ```
 
 ### Run the API
