@@ -57,8 +57,8 @@ function App() {
 function handleSearch() {
     setLoading(true);
     async function search() {
-      // const res = await fetch("https://api.sequence.obis.org/search?sequence=" + sequence.trim());
-      const res = await fetch("http://localhost:8000/search?sequence=" + sequence.trim());
+      const res = await fetch("https://api.sequence.obis.org/search?sequence=" + sequence.trim());
+      // const res = await fetch("http://localhost:8000/search?sequence=" + sequence.trim());
       const data = await res.json();
       setOccurrences(data["results"]);
       setTable(data["table"]);

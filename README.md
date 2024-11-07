@@ -76,6 +76,4 @@ rsync -r data root@obisr.iode.vliz.be:/data/sequence-search
 ```sh
 cd api
 uvicorn main:app --reload --port 8086
-# or
-gunicorn --worker-class uvicorn.workers.UvicornWorker --bind '127.0.0.1:8086' --daemon main:app
 ```
